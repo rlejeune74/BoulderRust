@@ -11,10 +11,10 @@ enum CellType {
 
 fn char_to_cell_type(data:char) -> CellType {
     match data {
-        'x' => CellType::Rock,
         'o' => CellType::Boulder,
         '0' => CellType::BoulderAndDiams,
-        _ => CellType::Mud
+        '1'..='9' | ' ' => CellType::Mud,
+        'x' | _ => CellType::Rock
     }
 }
 
@@ -43,7 +43,7 @@ impl Cell{
         match self.cell_type {
             CellType::Rock => "x".to_string(),
             CellType::Boulder => "o".to_string(),
-            CellType::BoulderAndDiams => "0".to_string(),
+            CellType::BoulderAndDiams => format!("0{}", self.diamands).to_string(),
             CellType::Mud => {
                 if self.diamands == 0 {
                     " ".to_string()
@@ -52,5 +52,13 @@ impl Cell{
                 }
             } 
         }
+    }
+
+    pub fn has_hidden_diamands(&self) -> bool {
+        self.cell_type == CellType::BoulderAndDiams
+    }
+
+    pub fn set_diamands(&mut self, diams:u32) {
+        self.diamands = diams;
     }
 }

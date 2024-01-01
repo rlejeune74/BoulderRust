@@ -1,6 +1,7 @@
 mod board;
 mod cell;
 mod coordinate;
+mod errors;
 
 use board::Board;
 
@@ -9,12 +10,17 @@ const DEFAULT_MAP:&str = "\
 xxxxxxxxxxxxxxxxxxxx\n\
 x                  x\n\
 x x x x x x x x x xx\n\
-xo o   o  o   o    x\n\
-x  1x 2 x3 4  5    x\n\
+xo o   o  o   02    x\n\
+x  1x 2 x3 4  3    x\n\
 xxxxxxxxxxxxxxxxxxxx\n";
 
 
 fn main() {
-    let map = Board::new(DEFAULT_MAP);
-    map.display();
+    let mut board = Board::new();
+    match board.load_map(DEFAULT_MAP) {
+        Err(e) => println!("Error: {}", e),
+        _ => println!("Map loaded")
+    }
+    println!("-------------------------\n");
+    println!("{}\n", board.to_string());
 }
