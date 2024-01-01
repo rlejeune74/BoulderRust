@@ -8,7 +8,6 @@ Yet another Boulder Rush, but in Rust
 [![Generated Doc](https://img.shields.io/badge/Doc-Generated-blue)](https://rlejeune74.github.io/BoulderRust/)
 
 
-
 ## Game Init
 
 ### Initial display
