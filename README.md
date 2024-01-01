@@ -1,6 +1,8 @@
 # BoulderRust
 Yet another Boulder Rush, but in Rust
 
+[![Coverage Status](https://coveralls.io/repos/github/rlejeune74/BoulderRust/badge.svg?branch=master)](https://coveralls.io/github/rlejeune74/BoulderRust?branch=master)
+
 ## Game Init
 
 ### Initial display

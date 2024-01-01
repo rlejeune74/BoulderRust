@@ -1,10 +1,12 @@
+use std::fmt;
 use crate::coordinate::Coordinate;
 
-enum Status{
+#[derive(PartialEq, Eq)]
+pub enum Status{
     Idle,
-    Pending,
     Dead
 }
+
 pub struct Player {
     name: String,
     coord: Coordinate,
@@ -13,7 +15,16 @@ pub struct Player {
 }
 
 impl Player {
-    pub fn new(name:String) -> Player {
-        Player{name, coord:Coordinate::new(0, 0), score:0, status:Status::Idle}
+    pub fn new(name:String, coord:Coordinate) -> Player {
+        Player{name, coord, score:0, status:Status::Idle}
+    }
+    pub fn status(&self) -> &Status {
+        &self.status
+    }
+}
+
+impl fmt::Display for Player {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{} {} {}", self.name, self.coord, self.score)
     }
 }
