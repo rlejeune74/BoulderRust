@@ -6,7 +6,7 @@ mod player;
 
 use board::Board;
 
-const DEFAULT_MAP:&str = "\
+const DEFAULT_MAP: &str = "\
 20 6 15\n\
 --------------------\n\
 --------------------\n\
@@ -14,7 +14,6 @@ x-x-x-x-x-x-x-x-x-x-\n\
 -o-o---o--o---02-----\n\
 ---1x-2-x3-4--3-----\n\
 --------------------\n";
-
 
 fn main() {
     let mut board = Board::new();
@@ -40,5 +39,4 @@ fn main() {
     }
 
     // simulate command `GAME START`
-    
 }

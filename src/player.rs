@@ -1,22 +1,27 @@
-use std::fmt;
 use crate::coordinate::Coordinate;
+use std::fmt;
 
 #[derive(PartialEq, Eq)]
-pub enum Status{
+pub enum Status {
     Idle,
-    Dead
+    Dead,
 }
 
 pub struct Player {
     name: String,
     coord: Coordinate,
     score: u32,
-    status: Status
+    status: Status,
 }
 
 impl Player {
-    pub fn new(name:String, coord:Coordinate) -> Player {
-        Player{name, coord, score:0, status:Status::Idle}
+    pub fn new(name: String, coord: Coordinate) -> Player {
+        Player {
+            name,
+            coord,
+            score: 0,
+            status: Status::Idle,
+        }
     }
     pub fn status(&self) -> &Status {
         &self.status
