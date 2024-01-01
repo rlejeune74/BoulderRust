@@ -1,4 +1,4 @@
-name: ci
+name: Rust CI
 
 on:
   push:
@@ -15,7 +15,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-
       - name: Install stable
         uses: actions-rs/toolchain@v1
         with:
@@ -23,18 +22,8 @@ jobs:
           toolchain: stable
           override: true
           components: clippy, rustfmt
-
-      - name: Run rustfmt
-        uses: actions-rs/cargo@v1
-        with:
-          command: fmt
-          args: -- --check --verbose
-
-      - name: Run cargo clippy
-        uses: actions-rs/cargo@v1
-        with:
-          command: clippy
-          args: --all-targets --tests --benches -- -D warnings
+      - run: cargo fmt -- --check --verbose
+      - run: cargo clippy --all-targets --tests --benches -- -D warnings
 
   test:
     strategy:
@@ -50,10 +39,7 @@ jobs:
           profile: minimal
           toolchain: nightly
           override: true
-      - uses: actions-rs/cargo@v1
-        with:
-          command: test
-          args: --all-features --no-fail-fast
+      - run: cargo  test --all-features --no-fail-fast
         env:
           CARGO_INCREMENTAL: "0"
           RUSTFLAGS: "-Zprofile -Ccodegen-units=1 -Cinline-threshold=0 -Clink-dead-code -Coverflow-checks=off -Cpanic=abort -Zpanic_abort_tests"
@@ -64,3 +50,15 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           path-to-lcov: ${{ steps.coverage.outputs.report }}
+      - name: Report coverage in PR status for the current commit
+        if: github.ref_name != 'master'
+        run: |
+          set -eu
+          total=$(cat ${COV_REPORT_DIR}/badges/flat.svg | egrep '<title>coverage: ' | cut -d: -f 2 | cut -d% -f 1 | sed 's/ //g')
+          curl -s "https://rlejeune74:${GITHUB_TOKEN}@api.github.com/repos/rlejeune74/BoulderRust/statuses/${COMMIT_SHA}" -d "{\"state\": \"success\",\"target_url\": \"https://github.com/rlejeune74/BoulderRust/pull/${PULL_NUMBER}/checks?check_run_id=${RUN_ID}\",\"description\": \"${total}%\",\"context\": \"Measured coverage\"}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          COMMIT_SHA: ${{ github.event.pull_request.head.sha }}
+          RUN_ID: ${{ github.run_id }}
+          PULL_NUMBER: ${{ github.event.pull_request.number }}
+          COV_REPORT_DIR: ${{ steps.coverage.outputs.report }}

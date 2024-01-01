@@ -2,7 +2,8 @@ name: Publish pages
 
 on:
   push:
-    branches: ["master"]
+    branches:
+      - master
 
 permissions:
   contents: read
