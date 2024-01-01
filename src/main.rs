@@ -2,6 +2,7 @@ mod board;
 mod cell;
 mod coordinate;
 mod errors;
+mod player;
 
 use board::Board;
 
@@ -22,5 +23,5 @@ fn main() {
         _ => println!("Map loaded")
     }
     println!("-------------------------\n");
-    println!("{}\n", board.to_string());
+    println!("{}\n", board);
 }

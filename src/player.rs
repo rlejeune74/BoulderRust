@@ -14,6 +14,6 @@ pub struct Player {
 
 impl Player {
     pub fn new(name:String) -> Player {
-        Player{name:name, coord:Coordinate::new(0, 0), score:0, status:Status::Idle}
+        Player{name, coord:Coordinate::new(0, 0), score:0, status:Status::Idle}
     }
 }

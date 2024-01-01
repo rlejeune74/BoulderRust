@@ -1,4 +1,5 @@
 use crate::coordinate::Coordinate;
+use std::fmt;
 use std::str::FromStr;
 
 #[derive(PartialEq, Eq, Clone)]
@@ -14,7 +15,7 @@ fn char_to_cell_type(data:char) -> CellType {
         'o' => CellType::Boulder,
         '0' => CellType::BoulderAndDiams,
         '1'..='9' | ' ' => CellType::Mud,
-        'x' | _ => CellType::Rock
+         _ => CellType::Rock
     }
 }
 
@@ -39,8 +40,18 @@ impl Cell{
          
     }
 
-    pub fn to_string(&self) -> String{
-        match self.cell_type {
+    pub fn has_hidden_diamands(&self) -> bool {
+        self.cell_type == CellType::BoulderAndDiams
+    }
+
+    pub fn set_diamands(&mut self, diams:u32) {
+        self.diamands = diams;
+    }
+}
+
+impl fmt::Display for Cell {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        let output = match self.cell_type {
             CellType::Rock => "x".to_string(),
             CellType::Boulder => "o".to_string(),
             CellType::BoulderAndDiams => format!("0{}", self.diamands).to_string(),
@@ -51,14 +62,7 @@ impl Cell{
                     self.diamands.to_string()
                 }
             } 
-        }
-    }
-
-    pub fn has_hidden_diamands(&self) -> bool {
-        self.cell_type == CellType::BoulderAndDiams
-    }
-
-    pub fn set_diamands(&mut self, diams:u32) {
-        self.diamands = diams;
+        };
+        write!(f, "{}", output)
     }
 }

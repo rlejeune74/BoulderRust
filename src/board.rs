@@ -1,5 +1,6 @@
 use crate::cell::Cell;
 use crate::errors::StrError;
+use std::fmt;
 use std::str::FromStr;
 
 pub struct Board{
@@ -32,14 +33,14 @@ impl Board {
             return Err(StrError::new("Height param and number of lines differ".to_string()));
         }
         // Number of line include the parameter line
-        for i in 1..(self.height+1) as usize{
+        (1..(self.height+1) as usize).for_each(|i| {
             let line = lines[i];
             let mut cells = Vec::new();
             let chars = line.chars().collect::<Vec<char>>();
             let mut j:u32 = 0;
             let mut _j = 0;
-            while _j < chars.len() as usize {
-                let mut cell = Cell::new(j as u32, i as u32, chars[_j]);
+            while _j < chars.len() {
+                let mut cell = Cell::new(j, i as u32, chars[_j]);
                 if cell.has_hidden_diamands() && _j < (chars.len() - 1){
                     _j += 1;
                     cell.set_diamands( chars[_j].to_digit(10).unwrap());
@@ -50,15 +51,20 @@ impl Board {
             }
             // force missing cell description to be a solid Rock.
             while j < self.width {
-                cells.push(Cell::new(j as u32, i as u32, 'x'));
+                cells.push(Cell::new(j, i as u32, 'x'));
                 j+=1;
             }
             self.map.push(cells);
-        }
+        });
         Ok(())
     }
 
-    pub fn to_string(&self) -> String {
+    fn get(&self, x:u32, y:u32) -> Option<&Cell> {
+        self.map.get(x as usize)?.get(y as usize)
+    }
+}
+impl fmt::Display for Board {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         let mut output = String::new();
         output.push_str(&format!("{} {} {}\n", self.width, self.height, self.diamands));
         for row in &self.map {
@@ -69,10 +75,6 @@ impl Board {
             output += &str_out;
             output.push('\n');
         }
-        return output;
-    }
-
-    fn get(&self, x:u32, y:u32) -> Option<&Cell> {
-        self.map.get(x as usize)?.get(y as usize)
+        write!(f, "{}", output)
     }
 }
