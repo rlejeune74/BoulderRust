@@ -1,5 +1,7 @@
 name: ci
 
+on: [push, pull_request]
+
 env:
   CARGO_TERM_COLOR: always
 
@@ -59,8 +61,7 @@ jobs:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         path-to-lcov: ${{ steps.coverage.outputs.report }}
 
-
- doc:
+   doc:
     runs-on: ubuntu-latest
 
     steps:
@@ -74,8 +75,4 @@ jobs:
         override: true
   
     - name: Generate docs
-      run: cargo doc --no-deps  
-
-      on: [push, pull_request]
-
-
+      run: cargo doc --no-deps 
