@@ -43,9 +43,11 @@ jobs:
         run: cargo doc --no-deps
       - name: Publish doc page
         run: rm -rf ./docs && echo "<meta http-equiv=\"refresh\" content=\"0; url=boulder_rust\">" > target/doc/index.html && touch target/doc/.nojekyll && cp -r target/doc ./docs
-      - uses: actions/upload-artifact@v2
-        with:
-          path: ./docs
+      - name: Fix permissions
+        run: |
+          chmod -c -R +rX "./docs" | while read line; do
+            echo "::warning title=Invalid file permissions automatically fixed::$line"
+          done
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
