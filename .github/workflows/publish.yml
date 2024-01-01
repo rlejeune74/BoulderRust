@@ -1,0 +1,30 @@
+name: publish
+
+on:
+  push:
+    branches:
+      - master
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  doc:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install stable
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          override: true
+
+      - name: Generate docs
+        run: cargo doc --no-deps
+      - name: Publish doc page
+        run: rm -rf ./docs
+          echo "<meta http-equiv=\"refresh\" content=\"0; url=boulder_rust\">" > target/doc/index.html
+          cp -r target/doc ./docs
