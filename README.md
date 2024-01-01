@@ -3,7 +3,7 @@ Yet another Boulder Rush, but in Rust
 
 [![Coverage Status](https://coveralls.io/repos/github/rlejeune74/BoulderRust/badge.svg?branch=master)](https://coveralls.io/github/rlejeune74/BoulderRust?branch=master)
 
-[![CI Status](https://github.com/rlejeune74/BoulderRust/workflows/ci/badge.svg)](https://github.com/rlejeune74/BoulderRust/actions/workflows/ci.yml)
+[![CI Status](https://github.com/rlejeune74/BoulderRust/workflows/ci/badge.svg)](https://github.com/rlejeune74/BoulderRust/actions/workflows/rust-ci.yml)
 
 [![Generated Doc](https://img.shields.io/badge/Doc-Generated-blue)](https://rlejeune74.github.io/BoulderRust/)
 
