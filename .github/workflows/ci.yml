@@ -61,7 +61,7 @@ jobs:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         path-to-lcov: ${{ steps.coverage.outputs.report }}
 
-   doc:
+  doc:
     runs-on: ubuntu-latest
 
     steps:
