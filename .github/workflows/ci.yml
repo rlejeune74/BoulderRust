@@ -31,9 +31,9 @@ jobs:
           args: -- --check --verbose
 
       - name: Run cargo clippy
-        uses: actions-rs/clippy-check@v1
+        uses: actions-rs/cargo@v1
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          command: clippy
           args: --all-targets --tests --benches -- -D warnings
 
   test:
