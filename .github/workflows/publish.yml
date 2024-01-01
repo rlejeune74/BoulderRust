@@ -25,6 +25,4 @@ jobs:
       - name: Generate docs
         run: cargo doc --no-deps
       - name: Publish doc page
-        run: rm -rf ./docs
-          echo "<meta http-equiv=\"refresh\" content=\"0; url=boulder_rust\">" > target/doc/index.html
-          cp -r target/doc ./docs
+        run: rm -rf ./docs && echo "<meta http-equiv=\"refresh\" content=\"0; url=boulder_rust\">" > target/doc/index.html && cp -r target/doc ./docs
