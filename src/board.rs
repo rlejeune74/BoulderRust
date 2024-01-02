@@ -141,7 +141,7 @@ impl Board {
 impl fmt::Display for Board {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         let mut output = String::new();
-        let players = self.list_players_by_state(player::Status::Dead, Some(false));
+        let players = self.list_players_by_state(player::Status::Dead, Some(true));
         if !players.is_empty() {
             output.push_str(&format!("{}\n", players.len()));
             for player in players {
