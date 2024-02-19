@@ -26,53 +26,6 @@ impl Board {
         }
     }
 
-    pub fn load_map(&mut self, map: &str) -> Result<(), StrError> {
-        let lines: Vec<&str> = map.lines().collect();
-        if lines.is_empty() {
-            return Err(StrError::new("Map is empty".to_string()));
-        } else {
-            let line = lines[0];
-            let parts = line.split_whitespace().collect::<Vec<&str>>();
-            if parts.len() != 3 {
-                panic!("Height or width missing in map definition.")
-            }
-            self.width = FromStr::from_str(parts[0]).unwrap();
-            self.height = FromStr::from_str(parts[1]).unwrap();
-            self.diamands = FromStr::from_str(parts[2]).unwrap();
-        }
-
-        if self.height != (lines.len() - 1) as u32 {
-            return Err(StrError::new(
-                "Height param and number of lines differ".to_string(),
-            ));
-        }
-        // Number of line include the parameter line
-        (1..(self.height + 1) as usize).for_each(|i| {
-            let line = lines[i];
-            let mut cells = Vec::new();
-            let chars = line.chars().collect::<Vec<char>>();
-            let mut j: u32 = 0;
-            let mut _j = 0;
-            while _j < chars.len() {
-                let mut cell = Cell::new(j, (i - 1) as u32, chars[_j]);
-                if cell.has_hidden_diamands() && _j < (chars.len() - 1) {
-                    _j += 1;
-                    cell.set_diamands(chars[_j].to_digit(10).unwrap());
-                }
-                cells.push(cell);
-                j += 1;
-                _j += 1;
-            }
-            // force missing cell description to be a solid Rock.
-            while j < self.width {
-                cells.push(Cell::new(j, (i - 1) as u32, 'x'));
-                j += 1;
-            }
-            self.map.push(cells);
-        });
-        Ok(())
-    }
-
     pub fn add_player(&mut self, name: String) -> Result<(), StrError> {
         if self.players.contains_key(&name) {
             return Err(StrError::new(
@@ -136,6 +89,57 @@ impl Board {
             };
         }
         count
+    }
+}
+
+impl TryFrom<&str> for Board {
+    type Error = StrError;
+    fn try_from(map: &str) -> Result<Self, Self::Error> {
+        let mut board = Board::new();
+        let lines: Vec<&str> = map.lines().collect();
+        if lines.is_empty() {
+            return Err(StrError::new("Map is empty".to_string()));
+        } else {
+            let line = lines[0];
+            let parts = line.split_whitespace().collect::<Vec<&str>>();
+            if parts.len() != 3 {
+                panic!("Height or width missing in map definition.")
+            }
+            board.width = FromStr::from_str(parts[0]).unwrap();
+            board.height = FromStr::from_str(parts[1]).unwrap();
+            board.diamands = FromStr::from_str(parts[2]).unwrap();
+        }
+
+        if board.height != (lines.len() - 1) as u32 {
+            return Err(StrError::new(
+                "Height param and number of lines differ".to_string(),
+            ));
+        }
+        // Number of line include the parameter line
+        (1..(board.height + 1) as usize).for_each(|i| {
+            let line = lines[i];
+            let mut cells = Vec::new();
+            let chars = line.chars().collect::<Vec<char>>();
+            let mut j: u32 = 0;
+            let mut _j = 0;
+            while _j < chars.len() {
+                let mut cell = Cell::new(j, (i - 1) as u32, chars[_j]);
+                if cell.has_hidden_diamands() && _j < (chars.len() - 1) {
+                    _j += 1;
+                    cell.set_diamands(chars[_j].to_digit(10).unwrap());
+                }
+                cells.push(cell);
+                j += 1;
+                _j += 1;
+            }
+            // force missing cell description to be a solid Rock.
+            while j < board.width {
+                cells.push(Cell::new(j, (i - 1) as u32, 'x'));
+                j += 1;
+            }
+            board.map.push(cells);
+        });
+        Ok(board)
     }
 }
 impl fmt::Display for Board {

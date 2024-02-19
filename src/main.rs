@@ -16,27 +16,22 @@ x-x-x-x-x-x-x-x-x-x-\n\
 --------------------\n";
 
 fn main() {
-    let mut board = Board::new();
-
     // simulate command `MAP [map.desc]`
-    match board.load_map(DEFAULT_MAP) {
-        Err(e) => println!("Error: {}", e),
-        _ => {
-            println!("Map loaded");
-            println!("-------------------------\n");
-            println!("{}\n", board);
-        }
-    }
+    let mut board = TryInto::<Board>::try_into(DEFAULT_MAP)
+        .map_err(|e| println!("Error: {}", e))
+        .unwrap();
+    println!("Map loaded");
+    println!("-------------------------\n");
+    println!("{}\n", board);
 
     // simulate command `PLAYER [NAME]`
-    match board.add_player("player1".to_string()) {
-        Err(e) => println!("Error: {}", e),
-        _ => {
-            println!("Player added");
-            println!("-------------------------\n");
-            println!("{}\n", board);
-        }
-    }
+    board
+        .add_player("player1".to_string())
+        .map_err(|e| println!("Error: {}", e))
+        .unwrap();
+    println!("Player added");
+    println!("-------------------------\n");
+    println!("{}\n", board);
 
     // simulate command `GAME START`
 }
